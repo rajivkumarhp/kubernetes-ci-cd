@@ -14,14 +14,15 @@ node {
 
     stage "Build"
     
-        sh "docker build -t ${imageName} -f applications/hello-kenzan/Dockerfile applications/hello-kenzan"
+        sh "docker build -t rajivkumarhp/test1:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan"
     
     stage "Push"
+withDockerRegistry([credentialsId: 'regcreds', url: 'https://hub.docker.com']) 
+    {
+        sh "docker push rajivkumarhp/test1:latest"
+    } 
+   // stage "Deploy"
 
-        sh "docker push ${imageName}"
-
-    stage "Deploy"
-
-        kubernetesDeploy configs: "applications/${appName}/k8s/*.yaml", kubeconfigId: 'kenzan_kubeconfig'
+     //   kubernetesDeploy configs: "applications/${appName}/k8s/*.yaml", kubeconfigId: 'kenzan_kubeconfig'
 
 }
